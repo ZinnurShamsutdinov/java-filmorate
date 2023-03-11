@@ -1,36 +1,38 @@
 package ru.yandex.practicum.filmorate.model;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class User {
-    private int id;
-    @Email(message = "Проверьте правильность заполнения адреса почты")
-    @NotBlank
+    @EqualsAndHashCode.Exclude
+    private Integer id;
+    //@Email(message = "Адрес электронной почты не может быть пустым и должен содержать символ @.")
     private String email;
-    @NotBlank(message = "Логин не должен быть пустым!")
+    //@NotBlank //(message = "Логин не может быть пустым или null")
     private String login;
     private String name;
-    @PastOrPresent(message = "День рождения не может быть в будущем!")
+   // @Past(message = "Дата рождения не может быть в будущем")
     private LocalDate birthday;
-    private Set<Integer> friends = new HashSet<>();
+    private final Set<User> friends = new HashSet<>();
 
-    public User(int id, String email, String login, String name, LocalDate birthday) {
-        this.id = id;
-        this.email = email;
-        this.login = login;
-        this.name = name;
-        this.birthday = birthday;
+    public Map<String, Object> toMap() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("person_id", id);
+        values.put("email", email);
+        values.put("login", login);
+        values.put("name", name);
+        values.put("birthday", birthday);
+        return values;
     }
+
 }
+
